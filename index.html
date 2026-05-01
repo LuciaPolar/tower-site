@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Башня NOVA — новый архитектурный символ Москвы</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0d1117;
+      color: #ffffff;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+      padding: 22px 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13, 17, 23, 0.72);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .logo span {
+      color: #c9a66b;
+    }
+
+    .nav {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #e7e7e7;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .nav a:hover {
+      color: #c9a66b;
+    }
+
+    .hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  padding: 120px 48px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  background:
+    linear-gradient(90deg, rgba(13,17,23,0.92), rgba(13,17,23,0.45)),
+    url("tower-day.png");
+  background-size: cover;
+  background-position: center;
+}
+
+body.night .hero {
+  background:
+    linear-gradient(90deg, rgba(3,8,18,0.92), rgba(3,8,18,0.35)),
+    url("tower-night.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.mode-toggle {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(201,166,107,0.6);
+  background: transparent;
+  color: #c9a66b;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.mode-toggle:hover {
+  background: #c9a66b;
+  color: #111;
+}
+
+    .hero-text {
+      max-width: 690px;
+    }
+
+    .label {
+      color: #c9a66b;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 68px;
+      line-height: 1.03;
+      margin: 0 0 24px;
+      letter-spacing: -2px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      line-height: 1.65;
+      color: #d6d6d6;
+      margin-bottom: 34px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 16px 28px;
+      background: #c9a66b;
+      color: #111;
+      text-decoration: none;
+      border-radius: 999px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      transform: translateY(-3px);
+      background: #e0bd7e;
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+
+    .button.secondary:hover {
+      border-color: #c9a66b;
+      color: #c9a66b;
+    }
+
+    .tower-card {
+        display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+      width: 340px;
+      min-height: 560px;
+      border-radius: 190px 190px 32px 32px;
+      background:
+        linear-gradient(90deg, transparent 0 18%, rgba(255,255,255,0.16) 18% 19%, transparent 19% 36%, rgba(255,255,255,0.12) 36% 37%, transparent 37% 54%, rgba(255,255,255,0.16) 54% 55%, transparent 55%),
+        linear-gradient(180deg, #e7e5df, #7e8792 34%, #323a47 68%, #121722);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.58);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      animation: floatTower 5s ease-in-out infinite;
+    }
+
+    .tower-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 190px 190px 32px 32px;
+}
+
+    @keyframes floatTower {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-14px);
+      }
+    }
+
+    .tower-card::before {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      border-radius: 170px 170px 22px 22px;
+      border: 1px solid rgba(255,255,255,0.35);
+    }
+
+    .tower-card::after {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 100%;
+      left: 57%;
+      top: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0));
+      transform: skewX(-12deg);
+      opacity: 0.42;
+    }
+
+    .stats {
+      display: flex;
+      gap: 28px;
+      margin-top: 44px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      border-left: 1px solid rgba(201,166,107,0.6);
+      padding-left: 16px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 32px;
+      color: #ffffff;
+    }
+
+    .stat span {
+      color: #b8b8b8;
+      font-size: 14px;
+    }
+
+    section {
+      padding: 95px 48px;
+    }
+
+    .light {
+      background: #f4efe6;
+      color: #161616;
+    }
+
+    .dark {
+      background: #101722;
+    }
+
+    .section-title {
+      max-width: 780px;
+      margin-bottom: 44px;
+    }
+
+    .section-title .label {
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      font-size: 46px;
+      line-height: 1.1;
+      margin: 0 0 20px;
+      letter-spacing: -1px;
+    }
+
+    .section-title p {
+      color: #4b4b4b;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .dark .section-title p {
+      color: #c9c9c9;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 26px;
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+      min-height: 180px;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+    }
+
+    .card strong {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 12px;
+      color: #b58d4a;
+    }
+
+    .card span {
+      color: #333;
+      line-height: 1.5;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .arch-image {
+      min-height: 470px;
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(201,166,107,0.12), rgba(0,0,0,0.4)),
+        url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1300&q=80");
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.4);
+    }
+
+    .arch-text {
+      padding: 10px;
+    }
+
+    .arch-text p {
+      color: #d0d0d0;
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 34px;
+    }
+
+    .feature {
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      color: #c9a66b;
+    }
+
+    .feature p {
+      color: #cfcfcf;
+      line-height: 1.6;
+    }
+
+    .cta {
+      text-align: center;
+      background:
+        linear-gradient(90deg, rgba(13,17,23,0.92), rgba(13,17,23,0.72)),
+        url("https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .cta h2 {
+      max-width: 850px;
+      margin: 0 auto 22px;
+    }
+
+    .cta p {
+      max-width: 680px;
+      margin: 0 auto 34px;
+      color: #d5d5d5;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 1000px) {
+      .hero,
+      .architecture {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      h1 {
+        font-size: 48px;
+      }
+
+      .cards,
+      .features {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .header,
+      .hero,
+      section {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      h2 {
+        font-size: 34px;
+      }
+
+      .cards,
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .tower-card {
+        width: 230px;
+        min-height: 400px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="logo">NOVA<span>TOWER</span></div>
+
+    <nav class="nav">
+      <a href="#project">О проекте</a>
+      <a href="#architecture">Архитектура</a>
+      <a href="#infrastructure">Инфраструктура</a>
+      <a href="#contacts">Контакты</a>
+      <button class="mode-toggle" onclick="toggleMode()">День / Ночь</button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-text">
+      <div class="label">Москва · будущий архитектурный символ</div>
+
+      <h1>Башня NOVA — 92 этажа над новым горизонтом Москвы</h1>
+
+      <p>
+        Премиальный многофункциональный небоскрёб, созданный как современная вертикаль
+        для жизни, бизнеса и инвестиций. Архитектура башни соединяет технологичность,
+        величие столицы и спокойную уверенность московского силуэта.
+      </p>
+
+      <div class="buttons">
+        <a class="button" href="#project">Узнать больше</a>
+        <a class="button secondary" href="#contacts">Оставить заявку</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <strong>92</strong>
+          <span>этажа</span>
+        </div>
+        <div class="stat">
+          <strong>410 м</strong>
+          <span>проектная высота</span>
+        </div>
+        <div class="stat">
+          <strong>2027</strong>
+          <span>старт строительства</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="light" id="project">
+    <div class="section-title">
+      <div class="label">О проекте</div>
+      <h2>Вертикальный город внутри Москвы</h2>
+      <p>
+        NOVA Tower — проект нового поколения, объединяющий офисы класса А,
+        апартаменты, общественные пространства, рестораны, sky-lounge и приватную
+        инфраструктуру для резидентов.
+      </p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <strong>92</strong>
+        <span>этажа с панорамными видами на исторический центр и деловой кластер Москвы.</span>
+      </div>
+
+      <div class="card">
+        <strong>410 м</strong>
+        <span>проектная высота башни, формирующая новый выразительный силуэт столицы.</span>
+      </div>
+
+      <div class="card">
+        <strong>А+</strong>
+        <span>класс офисных пространств с гибкими планировками и приватными сервисами.</span>
+      </div>
+
+      <div class="card">
+        <strong>24/7</strong>
+        <span>сервис, безопасность, консьерж-инфраструктура и управление объектом.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" id="architecture">
+    <div class="architecture">
+      <div class="arch-image"></div>
+
+      <div class="arch-text">
+        <div class="label">Архитектура</div>
+        <h2>Форма, вдохновлённая московским светом</h2>
+        <p>
+          Башня задумана как спокойная, вытянутая вертикаль с мягкими гранями.
+          В фасаде сочетаются холодное стекло, металлические линии и тёплая подсветка,
+          чтобы здание выглядело современно днём и торжественно вечером.
+        </p>
+        <p>
+          Архитектура не спорит с городом, а дополняет его: строгий силуэт,
+          выразительная корона и общественный нижний уровень создают ощущение
+          масштаба, но не перегружают городскую среду.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" id="infrastructure">
+    <div class="section-title">
+      <div class="label">Инфраструктура</div>
+      <h2>Всё необходимое — внутри башни</h2>
+      <p>
+        Проект создаётся как самостоятельная городская экосистема, где рабочий день,
+        деловые встречи, отдых и приватные сервисы находятся в одной вертикали.
+      </p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <h3>Sky-lounge</h3>
+        <p>Панорамная зона на верхних этажах для встреч, мероприятий и вечерних видов на Москву.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Офисы класса А</h3>
+        <p>Гибкие пространства для штаб-квартир, инвестиционных компаний и технологических команд.</p>
+      </div>
+
+      <div class="feature">
+        <h3>Приватные резиденции</h3>
+        <p>Апартаменты с высоким уровнем сервиса, приватностью и видами на ключевые точки столицы.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="contacts">
+    <h2>Получите закрытую презентацию проекта NOVA Tower</h2>
+    <p>
+      Оставьте заявку, чтобы получить инвестиционный меморандум, предварительные планировки
+      и информацию о старте бронирования площадей.
+    </p>
+
+    <a class="button" onclick="sendRequest()">Оставить заявку</a>
+  </section>
+
+  <script>
+    function sendRequest() {
+      alert("Спасибо! В следующей версии мы добавим полноценную форму заявки.");
+    }
+
+    function toggleMode() {
+  document.body.classList.toggle("night");
+}
+  </script>
+
+</body>
+</html>
